@@ -3,7 +3,8 @@ from telebot import types
 import sqlite3
 import logging
 import time
-
+from flask import Flask
+import threading
 # ----------------- 1. BOT SOZLAMALARI VA DB SETUP -----------------
 API_TOKEN = '7966505221:AAHEUj82be8yTNnmfKhbpTz9CqiSR75SAx4' # O'zingizning haqiqiy TOKENINGIZNI KIRITING
 DB_NAME = 'bot.db'
@@ -14,7 +15,18 @@ CHANNELS = [
     '@tarjimakinolar_bizda',  # Haqiqiy kanal username'laringizni yozing!
     # '@kanal_username_2'
 ]
+app = Flask(__name__)
 
+@app.route('/')
+def index():
+    return "Bot ishlayapti!"
+
+def run():
+    app.run(host='0.0.0.0', port=8080)
+
+def keep_alive():
+    t = threading.Thread(target=run)
+    t.start()
 # Logging sozlamalari
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -574,6 +586,7 @@ def inline_query_handler(inline_query):
 
 # --- BOTNI ISHGA TUSHIRISH ---
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+    keep_alive()
     logging.info("Bot ishga tushirildi...")
     bot.infinity_polling(skip_pending=True)

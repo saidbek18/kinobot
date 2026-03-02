@@ -1,1 +1,3 @@
-pytelegrambotapi
+pyTelegramBotAPI
+flask
+gunicorn
